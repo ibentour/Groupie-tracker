@@ -1,0 +1,226 @@
+/* Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #fff;
+    background-image: url(/assets/bg-photo.png);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+/* Header Styles */
+header {
+    background-color: rgba(26, 26, 26, 0.8);
+    color: #fff;
+    padding: 1.5em;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Main Content Styles */
+main {
+    max-width: 1500px;
+    margin: 40px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+/* Artist Card Styles */
+.artist-card {
+    background-color: transparent;
+    border-radius: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    width: 200px;
+    height: 230px;
+    margin: 30px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.artist-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.artist-card h2 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    font-size: 14px;
+    text-align: center;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease-in-out;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.artist-card:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.artist-card:hover img {
+    transform: scale(1.1);
+}
+
+.artist-card:hover h2 {
+    background-color: rgba(0, 0, 0, 0.5);
+    white-space: normal;
+    height: auto;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.artist-card a {
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Artist Info Page Styles */
+.artist-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
+    margin: 40px auto;
+    max-width: 800px;
+}
+
+.artist-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 1em;
+    object-fit: cover;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.card {
+    padding: 1.5em;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    background-color: rgba(51, 51, 51, 0.7);
+    text-align: center;
+    flex: 1 1 calc(33.33% - 20px);
+    min-width: 250px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h2 {
+    margin-bottom: 15px;
+    color: #fff;
+    font-size: 1.2em;
+}
+
+.card p {
+    color: #ccc;
+    white-space: pre-line;
+    line-height: 1.4;
+}
+
+.home-button {
+    position: fixed;
+    bottom: 2em;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #444;
+    color: #fff;
+    padding: 1em 2em;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.home-button:hover {
+    background-color: #555;
+    transform: translateX(-50%) scale(1.05);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .artist-info {
+        max-width: 90%;
+        padding: 1.5em;
+    }
+    
+    .card {
+        flex: 1 1 calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .artist-card {
+        width: 150px;
+        height: 200px;
+    }
+    
+    .artist-card img {
+        height: 150px;
+    }
+    
+    .artist-card h2 {
+        font-size: 12px;
+    }
+    
+    .artist-info {
+        max-width: 95%;
+        padding: 1em;
+    }
+    
+    .card {
+        flex: 1 1 100%;
+    }
+    
+    .artist-image {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .home-button {
+        padding: 0.8em 1.6em;
+        font-size: 1em;
+    }
+}

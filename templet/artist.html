@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Name }}</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2em;
+        }
+
+</style>
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{ .Name }}</h1>
+    </header>
+    <main>
+        <div class="artist-info">
+            <img src="{{ .Image }}" alt="Artist Image" class="artist-image">
+            <div class="card-container">
+                <div class="card">
+                    <h2>Members:</h2>
+                    <p>
+                        {{ range .Members }}
+                            {{ . }}
+                            <br>
+                        {{ end }}
+                    </p>
+                </div>
+                <div class="card">
+                    <h2>Creation Date:</h2>
+                    <p>{{ .CreationDate }}</p>
+                </div>
+                <div class="card">
+                    <h2>First Album:</h2>
+                    <p>{{ .FirstAlbum }}</p>
+                </div>
+                <div class="card">
+                    <h2>Locations:</h2>
+                    <p>
+                        {{ range .Locations }}
+                            {{ . }}
+                            <br>
+                        {{ end }}
+                    </p>
+                </div>
+                <div class="card">
+                    <h2>Dates:</h2>
+                    <p>
+                        {{ range .Dates }}
+                            {{ . }}
+                            <br>
+                        {{ end }}
+                    </p>
+                </div>
+                <div class="card">
+                    <h2>Relation:</h2>
+                    <p>
+                        {{ range $key, $value := .Relation }}
+                            {{$key}}:
+                            {{ range $k, $v := $value }}
+                                {{$k}}: {{$v}}
+                            {{ end }}
+                            <br>
+                        {{ end }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <button class="home-button" onclick="window.location.href='/'">Home</button>
+</body>
+</html>
