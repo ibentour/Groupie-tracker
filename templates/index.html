@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Tracker</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <header>
+        <h1>Groupie Tracker</h1>
+    </header>
+    <br>
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search for artists, members, locations...">
+        <div id="search-suggestions"></div>
+    </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <main>
+        {{ range . }}
+        <div class="artist-card">
+            <a href="/Artist?id={{ .Id }}">
+                <img src="{{ .Image }}" alt="Artist Image">
+                <h2>{{ .Name }}</h2>
+            </a>
+        </div>
+        {{ end }}
+    </main>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Groupie Tracker. All rights reserved to Zone01 Oujda. </p>
+            <a href="/about"> About Us</a>
+        </div>
+    </footer>
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const searchSuggestions = document.getElementById('search-suggestions');
+        
+        searchInput.addEventListener('input', debounce(handleSearch, 300));
+        
+        function debounce(func, delay) {
+            let timeoutId;
+            return function (...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+        
+        async function handleSearch() {
+            const query = searchInput.value.trim();
+            if (query.length < 1) {
+                searchSuggestions.innerHTML = '';
+                return;
+            }
+        
+            try {
+                const response = await fetch(`/search?q=${encodeURIComponent(query)}`);
+                const results = await response.json();
+                displaySearchSuggestions(results);
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+            }
+        }
+        
+        function displaySearchSuggestions(results) {
+            searchSuggestions.innerHTML = '';
+            if (results.length === 0) {
+                searchSuggestions.innerHTML = '<p>No results found</p>';
+                return;
+            }
+        
+            const ul = document.createElement('ul');
+            results.forEach(result => {
+                const li = document.createElement('li');
+                li.textContent = `${result.value} - ${result.type}`;
+                li.addEventListener('click', () => {
+                    window.location.href = `/Artist?id=${result.id}`;
+                });
+                ul.appendChild(li);
+            });
+            searchSuggestions.appendChild(ul);
+        }
+        </script>
+</body>
+</html>

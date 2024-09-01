@@ -7,7 +7,14 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"sync"
+)
+
+// Global variables to hold data
+var (
+	artistData []map[string]interface{} // Holds processed artist data
+	templates  *template.Template       // Holds parsed HTML templates
 )
 
 // Data structures for JSON parsing
@@ -57,12 +64,6 @@ type (
 			DatesLocations map[string][]string `json:"datesLocations"`
 		} `json:"index"`
 	}
-)
-
-// Global variables
-var (
-	artistData []map[string]interface{} // Holds processed artist data
-	templates  *template.Template       // Holds parsed HTML templates
 )
 
 // fetchData retrieves data from a given URL and decodes it into the target structure.
@@ -127,6 +128,7 @@ func gatherData() error {
 		}
 	}()
 
+	// Wait for all goroutines to finish
 	wg.Wait()
 
 	// Check if any errors occurred during fetching
@@ -135,17 +137,17 @@ func gatherData() error {
 	}
 
 	// Process and combine all data into artistData
-	for i := 0; i < len(artists); i++ {
+	for x := 0; x < len(artists); x++ {
 		artistData = append(artistData, map[string]interface{}{
-			"Id":           artists[i].ID,
-			"Name":         artists[i].Name,
-			"Image":        artists[i].Image,
-			"Members":      artists[i].Members,
-			"CreationDate": artists[i].CreationDate,
-			"FirstAlbum":   artists[i].FirstAlbum,
-			"Locations":    locations.Index[i].Locations,
-			"Dates":        dates.Index[i].Dates,
-			"Relation":     relation.Index[i].DatesLocations,
+			"Id":           artists[x].ID,
+			"Name":         artists[x].Name,
+			"Image":        artists[x].Image,
+			"Members":      artists[x].Members,
+			"CreationDate": artists[x].CreationDate,
+			"FirstAlbum":   artists[x].FirstAlbum,
+			"Locations":    locations.Index[x].Locations,
+			"Dates":        dates.Index[x].Dates,
+			"Relation":     relation.Index[x].DatesLocations,
 		})
 	}
 
@@ -156,19 +158,22 @@ func gatherData() error {
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the request method is GET
 	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		http.Error(w, "405 ! Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
 	// Ensure we're on the root path
 	if r.URL.Path != "/" {
-		http.Error(w, "Page not found", http.StatusNotFound)
+		// Execute the 404 template
+		if err := templates.ExecuteTemplate(w, "404.html", nil); err != nil {
+			http.Error(w, "500 ! "+err.Error(), http.StatusInternalServerError)
+		}
 		return
 	}
 
 	// Execute the index template with the artist data
 	if err := templates.ExecuteTemplate(w, "index.html", artistData); err != nil {
-		http.Error(w, "Error: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "500 ! "+err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -176,20 +181,34 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 func singleArtistHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the request method is GET
 	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		http.Error(w, "405 ! Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
 	// Parse and validate the artist ID from the URL query
 	artistID, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || artistID < 1 || artistID > len(artistData) {
-		http.Error(w, "Invalid Artist ID", http.StatusBadRequest)
+		http.Error(w, "400 ! Invalid Artist ID", http.StatusBadRequest)
 		return
 	}
 
 	// Execute the artist template with the specific artist's data
 	if err := templates.ExecuteTemplate(w, "artist.html", artistData[artistID-1]); err != nil {
-		http.Error(w, "Error: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "500 ! "+err.Error(), http.StatusInternalServerError)
+	}
+}
+
+// aboutHandler handles HTTP requests for the about page ("/about").
+func aboutHandler(w http.ResponseWriter, r *http.Request) {
+	// Check if the request method is GET
+	if r.Method != http.MethodGet {
+		http.Error(w, "405 ! Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Execute the about template
+	if err := templates.ExecuteTemplate(w, "about.html", nil); err != nil {
+		http.Error(w, "500 ! "+err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -209,22 +228,72 @@ func init() {
 
 	// Parse HTML templates
 	var err error
-	templates, err = template.New("").Funcs(funcMap).ParseGlob("templet/*.html")
+	templates, err = template.New("").Funcs(funcMap).ParseGlob("templates/*.html")
 	if err != nil {
-		log.Fatalf("Failed to parse templates: %v", err)
+		log.Fatalf("Failed to parse the HTML templates: %v", err)
 	}
 }
 
+// main is the entry point of the application
 func main() {
 	// Serve static files (CSS)
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
 	// Set up route handlers
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/Artist", singleArtistHandler)
+	http.HandleFunc("/about", aboutHandler)
+	http.HandleFunc("/search", searchHandler)
 
 	// Start the HTTP server
 	fmt.Println("Server started at :8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
+}
+
+// Add this new struct to your existing types
+type SearchResult struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
+	ID    int    `json:"id"`
+}
+
+// Add this new function to handle search requests
+func searchHandler(w http.ResponseWriter, r *http.Request) {
+	query := strings.ToLower(r.URL.Query().Get("q"))
+	var results []SearchResult
+
+	for _, artist := range artistData {
+		// Search by artist name
+		if strings.Contains(strings.ToLower(artist["Name"].(string)), query) {
+			results = append(results, SearchResult{Type: "artist", Value: artist["Name"].(string), ID: artist["Id"].(int)})
+		}
+
+		// Search by members
+		for _, member := range artist["Members"].([]string) {
+			if strings.Contains(strings.ToLower(member), query) {
+				results = append(results, SearchResult{Type: "member", Value: member, ID: artist["Id"].(int)})
+			}
+		}
+
+		// Search by locations
+		for _, location := range artist["Locations"].([]string) {
+			if strings.Contains(strings.ToLower(location), query) {
+				results = append(results, SearchResult{Type: "location", Value: location, ID: artist["Id"].(int)})
+			}
+		}
+
+		// Search by first album date
+		if strings.Contains(strings.ToLower(artist["FirstAlbum"].(string)), query) {
+			results = append(results, SearchResult{Type: "first album", Value: artist["FirstAlbum"].(string), ID: artist["Id"].(int)})
+		}
+
+		// Search by creation date
+		if strings.Contains(strconv.Itoa(artist["CreationDate"].(int)), query) {
+			results = append(results, SearchResult{Type: "creation date", Value: strconv.Itoa(artist["CreationDate"].(int)), ID: artist["Id"].(int)})
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(results)
 }

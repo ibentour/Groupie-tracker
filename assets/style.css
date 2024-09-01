@@ -6,8 +6,8 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
+    font-family: monospace;
+    line-height: 1.5;
     color: #fff;
     background-image: url(/assets/bg-photo.png);
     background-size: cover;
@@ -29,79 +29,62 @@ header {
 
 /* Main Content Styles */
 main {
-    max-width: 1500px;
-    margin: 40px auto;
+    max-width: 1800px;
+    margin: 10px auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 0 20px;
 }
 
 /* Artist Card Styles */
 .artist-card {
     background-color: transparent;
     border-radius: 30px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    width: 200px;
-    height: 230px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    width: 210px;
+    height: 240px;
     margin: 30px;
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
 }
+.artist-card:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
 
 .artist-card img {
     width: 100%;
-    height: 180px;
+    height: 200px;
     object-fit: cover;
-    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
 }
 
 .artist-card h2 {
+    color: #fff;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    font-size: 14px;
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 11px;
     text-align: center;
-    height: 50px;
+    height: 40px;
     display: flex;
+    padding: 15.5px 30px;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease-in-out;
-    overflow: hidden;
+    transition: background-color 0.2s ease-in-out;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.artist-card:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-}
-
-.artist-card:hover img {
-    transform: scale(1.1);
-}
-
-.artist-card:hover h2 {
-    background-color: rgba(0, 0, 0, 0.5);
     white-space: normal;
-    height: auto;
-    max-height: 150px;
-    overflow-y: auto;
 }
+.artist-card:hover h2 {
+    background-color: rgba(0, 0, 0, 0.6);
+} 
 
-.artist-card a {
-    text-decoration: none;
-    color: #fff;
-    display: block;
-    width: 100%;
-    height: 100%;
-}
 
 /* Artist Info Page Styles */
 .artist-info {
@@ -109,75 +92,79 @@ main {
     flex-direction: column;
     align-items: center;
     padding: 2em;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    border-radius: 35px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
     background-color: rgba(0, 0, 0, 0.7);
-    margin: 40px auto;
-    max-width: 800px;
+    margin: 10px auto;
+    max-width: 1500px;
 }
 
 .artist-image {
     width: 200px;
     height: 200px;
-    border-radius: 50%;
-    margin-bottom: 1em;
+    border-radius: 100%;
+    margin-bottom: 1.2em;
     object-fit: cover;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-}
-
-.card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-
-.card {
-    padding: 1.5em;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    background-color: rgba(51, 51, 51, 0.7);
-    text-align: center;
-    flex: 1 1 calc(33.33% - 20px);
-    min-width: 250px;
-    transition: transform 0.3s ease-in-out;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-.card h2 {
-    margin-bottom: 15px;
-    color: #fff;
-    font-size: 1.2em;
-}
-
-.card p {
-    color: #ccc;
-    white-space: pre-line;
-    line-height: 1.4;
+    box-shadow: 0 0 35px rgba(255, 255, 255, 0.8);
 }
 
 .home-button {
-    position: fixed;
-    bottom: 2em;
+    position: sticky;
+    bottom: 3.8em;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #444;
+    background-color: #44444486;
     color: #fff;
-    padding: 1em 2em;
+    padding: 0.7em 2em;
     border: none;
-    border-radius: 30px;
+    border-radius: 35px;
     cursor: pointer;
     font-size: 1.1em;
     transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
-
 .home-button:hover {
-    background-color: #555;
-    transform: translateX(-50%) scale(1.05);
+    background-color: #5f5f5f94;
+    transform: translateX(-50%) scale(1.3);
 }
+
+/* Card Styles */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.card {
+    flex: 1 1 calc(33.33% - 180px);
+    min-width: 250px;
+    max-width: 100%;
+    padding: 1.5em;
+    border-radius: 35px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    background-color: rgba(51, 51, 51, 0.6);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+.card:hover {
+    transform: translateY(-15px);
+}
+
+.card p {
+    white-space: pre-line; 
+    line-height: 0.8;
+    place-content: space-evenly;
+    flex-grow: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin-top: 30px;
+}
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {
@@ -187,40 +174,230 @@ main {
     }
     
     .card {
-        flex: 1 1 calc(50% - 20px);
+        flex: 1 1 100%;
+        min-width: 200px;
+    }
+    
+    .card h2 {
+        font-size: 1.1em;
+    }
+    
+    .card p {
+        font-size: 0.85em;
+    }
+    
+    .home-button {
+        font-size: 0.9em;
     }
 }
 
 @media (max-width: 480px) {
-    .artist-card {
-        width: 150px;
-        height: 200px;
-    }
-    
-    .artist-card img {
-        height: 150px;
-    }
-    
-    .artist-card h2 {
-        font-size: 12px;
-    }
-    
     .artist-info {
         max-width: 95%;
-        padding: 1em;
-    }
-    
-    .card {
-        flex: 1 1 100%;
+        padding: 0.5em;
     }
     
     .artist-image {
-        width: 200px;
-        height: 200px;
+        width: 150px;
+        height: 150px;
+    }
+    
+    .card {
+        padding: 1em;
+        min-width: 0;
+    }
+    
+    .card h2 {
+        font-size: 1em;
+    }
+    
+    .card p {
+        font-size: 0.8em;
     }
     
     .home-button {
-        padding: 0.8em 1.6em;
-        font-size: 1em;
+        font-size: 0.8em;
     }
+}
+
+@media (max-width: 380px) {
+    .card-container {
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .artist-info {
+        padding: 0.8em;
+    }
+    
+    .card {
+        padding: 0.8em;
+    }
+    
+    .card h2 {
+        font-size: 0.9em;
+        margin-bottom: 10px;
+    }
+    
+    .card p {
+        font-size: 0.75em;
+        line-height: 1.2;
+    }
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333333a1;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-content p {
+    margin-right: 10px;
+}
+
+.footer-content a {
+    color: #888acd;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.footer-content a:hover {
+    color: #fff;
+}
+
+
+/* About Page Styles */
+.about-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5em;
+    border-radius: 35px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.7);
+    margin: 50px auto;
+    white-space: pre-line;
+    overflow-wrap: break-word;
+    max-width: 1000px;
+    color: #fff;
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: 2em;
+}
+
+.about-header h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+}
+
+.about-content {
+    max-width: 800px;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+.about-content p {
+    margin-bottom: 1.5em;
+}
+
+/* Responsive Styles for About Page */
+@media (max-width: 1100px) {
+    .about-page {
+        max-width: 80%;
+        padding: 1.5em;
+    }
+    
+    .about-header h1 {
+        font-size: 2em;
+    }
+}
+
+/* Error Page styles */
+.error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 70vh;
+    margin: 40px 90px;
+}
+  
+/* Style the error content */
+.error-content {
+    background-color:#00000097;
+    border-radius: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    padding: 3em 2em;
+    color: #fff;
+}
+
+/* Style the 404 heading */
+.error-page h1 {
+    font-size: 3em;
+    margin-bottom: 1em;
+}
+  
+/* Style the error message paragraph */
+.error-page p {
+    font-size: 1.2em;
+    margin-bottom: 2em;
+}
+
+
+/* Search Styles */
+.search-container {
+    max-width: 1000px;
+    width: 50%;
+    position: relative;
+    margin: 0px auto;
+}
+
+#search-input {
+    width: 100%;;
+    height: 23px;
+    padding: 23px;
+    font-size: 16px;
+    border-radius: 20px 20px 0 0;
+    background-color: rgba(46, 46, 46, 0.8);
+    color: rgb(255, 255, 255);
+    border:none;
+    outline: none;
+}
+
+#search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 0 0 25px 25px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#search-suggestions ul {
+    list-style-type: none;
+    color: rgb(255, 255, 255);
+
+}
+
+#search-suggestions li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#search-suggestions li:hover {
+    background-color: rgba(245, 245, 245, 0.295);
 }
