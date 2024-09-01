@@ -330,6 +330,7 @@ footer {
     text-align: center;
     min-height: 70vh;
     margin: 40px 90px;
+    font-size: 11px;
 }
   
 /* Style the error content */
